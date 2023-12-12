@@ -1,0 +1,146 @@
+---
+title: "Sexual dimorphism in Chinstrap Penguins"
+author: "Ahmed Tijani Akinfalabi, University of Potsdam, Germany"
+date: "2023-12-12"
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(comment = "###")
+```
+
+
+```{r label=loading,results="hide",echo=FALSE}
+library(knitr)
+library(palmerpenguins)
+library(ggplot2)
+```
+
+# Data summary
+
+```{r label=data}
+data(penguins)
+head(penguins)
+df_penguins = data.frame(penguins)
+
+# Used summary to get the overview of the data
+summary(df_penguins)
+
+# This table represent the 3 different species and their population on the Island.
+table_penguins = table(df_penguins$species, df_penguins$island)
+table_penguins
+
+chinstrapData = df_penguins[df_penguins$species == "Chinstrap",]
+
+head(chinstrapData)
+nrow(chinstrapData)
+```
+
+
+# Data Visualization
+
+```{r label= GGPLOT}
+# Using GGPlot to visualize the difference between Male and Female regarding different attributes
+
+ggplot(chinstrapData, aes(x = sex, y = bill_length_mm)) +
+  geom_boxplot() +
+  labs(title = "GGPLot of Bill Length against Sex")
+
+ggplot(chinstrapData, aes(x = sex, y = bill_depth_mm)) +
+  geom_boxplot() +
+  labs(title = "GGPLot of Bill Depth against Sex")
+
+ggplot(chinstrapData, aes(x = sex, y = flipper_length_mm)) +
+  geom_boxplot() +
+  labs(title = "GGPLot of Flipper Length against Sex")
+
+ggplot(chinstrapData, aes(x = sex, y = body_mass_g)) +
+  geom_boxplot() +
+  labs(title = "GGPLot of Body mass against Sex")
+
+```
+
+
+# Tests
+
+# I got different P values in both t tests by just switching the way i Populated the dataframe. INTERESTING! 
+```{r label = test}
+# Example data frame
+chinstrapData_sex_billLength = data.frame(
+  Sex = rep(c("Male", "Female"), each = sum(chinstrapData$sex == "male")),
+  BillLength = c(chinstrapData$bill_length_mm)
+)
+
+head(chinstrapData_sex_billLength)
+
+# Independent samples t-test
+t_test_result <- t.test(BillLength ~ Sex, data = chinstrapData_sex_billLength)
+print(t_test_result)
+
+```
+
+
+# T-test sex against bill Length
+
+```{r}
+sex = chinstrapData$sex
+billLength = chinstrapData$bill_length_mm
+
+df_billL_sex = data.frame(sex , billLength)
+df_billL_sex
+
+# Independent samples t-test
+t_test_result2 <- t.test(billLength ~ sex, data = df_billL_sex)
+print(t_test_result2)
+
+```
+
+
+# T-test sex against bill depth
+
+```{r}
+sex = chinstrapData$sex
+billDepth = chinstrapData$bill_depth_mm
+
+df_billD_sex = data.frame(sex , billDepth)
+df_billD_sex
+
+# Independent samples t-test
+t_test_result3 <- t.test(billDepth ~ sex, data = df_billD_sex)
+print(t_test_result3)
+
+```
+
+
+# T-test sex against flipLength
+
+```{r}
+sex = chinstrapData$sex
+flipLength = chinstrapData$flipper_length_mm
+
+df_flipL_sex = data.frame(sex , flipLength)
+df_flipL_sex
+
+# Independent samples t-test
+t_test_result4 <- t.test(flipLength ~ sex, data = df_flipL_sex)
+print(t_test_result4)
+
+```
+
+
+# T-test sex against body mass
+
+```{r}
+sex = chinstrapData$sex
+body_mass = chinstrapData$body_mass_g
+
+df_body_mass_sex = data.frame(sex , body_mass)
+df_body_mass_sex
+
+# Independent samples t-test
+t_test_result5 <- t.test(body_mass ~ sex, data = df_body_mass_sex)
+print(t_test_result5)
+
+```
+
+
+# It is worthy to note the differences in p value and t value and to see how great the significant difference.
